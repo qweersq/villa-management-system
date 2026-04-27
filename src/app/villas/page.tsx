@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 import { deleteVilla } from "@/app/actions";
+import { Edit, Trash } from "lucide-react";
 
 export default async function VillasPage() {
   const villas = await prisma.villa.findMany({
@@ -54,8 +55,15 @@ export default async function VillasPage() {
                   <TableCell>Rp {Number(villa.price).toLocaleString('id-ID')}</TableCell>
                   <TableCell>{villa.capacity} Orang</TableCell>
                   <TableCell className="text-right flex justify-end gap-2">
+                    <Link href={`/villas/${villa.id}/edit`} title="Edit Villa">
+                      <Button variant="outline" size="icon" className="h-8 w-8">
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                    </Link>
                     <form action={deleteVilla.bind(null, villa.id)}>
-                      <Button variant="destructive" size="sm" type="submit">Hapus</Button>
+                      <Button variant="destructive" size="icon" className="h-8 w-8" type="submit" title="Hapus Villa">
+                        <Trash className="h-4 w-4" />
+                      </Button>
                     </form>
                   </TableCell>
                 </TableRow>

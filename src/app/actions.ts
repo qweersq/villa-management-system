@@ -14,13 +14,23 @@ export async function createVilla(formData: FormData) {
 
   await prisma.villa.create({ data: parsed.data });
   revalidatePath("/villas");
-  
+
   return { success: true };
 }
 
 export async function deleteVilla(id: string) {
   await prisma.villa.delete({ where: { id } });
   revalidatePath("/villas");
+}
+
+export async function updateVilla(id: string, formData: FormData) {
+  const parsed = VillaSchema.safeParse(Object.fromEntries(formData.entries()));
+  if (!parsed.success) return { error: parsed.error.flatten() };
+
+  await prisma.villa.update({ where: { id }, data: parsed.data });
+  revalidatePath("/villas");
+
+  return { success: true };
 }
 
 // ==========================================
@@ -54,6 +64,6 @@ export async function createReservation(formData: FormData) {
   });
 
   revalidatePath("/reservations");
-  
+
   return { success: true };
 }

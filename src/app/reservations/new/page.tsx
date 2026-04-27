@@ -26,7 +26,7 @@ export default async function NewReservationPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <ReservationForm villas={villas} />
+          <ReservationForm villas={villas.map(v => ({ ...v, price: Number(v.price) }))} />
         </CardContent>
       </Card>
     </div>
