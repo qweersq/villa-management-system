@@ -44,12 +44,13 @@ DATABASE_URL="postgresql://macpro@localhost:5432/balimo_villa?schema=public"
 ### 4. Jalankan Migrasi Database Prisma
 
 ```bash
-npx prisma migrate dev --name init
+npx prisma migrate dev
+npx prisma generate
 ```
 
 Perintah ini akan:
 - Membuat tabel `Villa` dan `Reservation` di database
-- Menggenerate Prisma Client
+- Menggenerate Prisma Client versi terbaru
 
 ### 5. (Opsional) Seed Data
 
@@ -72,24 +73,24 @@ Buka [http://localhost:3000](http://localhost:3000) di browser.
 ```
 src/
 ├── app/
-│   ├── layout.tsx                  # Root layout
-│   ├── page.tsx                    # Halaman utama / dashboard
-│   ├── actions.ts                  # Server Actions (CRUD villa & reservasi)
+│   ├── layout.tsx                  # Root layout (Navbar & Font Outfit)
+│   ├── page.tsx                    # Dashboard (Stats & Featured Villas)
+│   ├── actions.ts                  # Server Actions (CRUD & Overlap Validation)
 │   ├── villas/
-│   │   ├── page.tsx               # List semua villa
+│   │   ├── page.tsx               # List villa dengan thumbnail
 │   │   ├── new/page.tsx           # Form tambah villa
 │   │   └── [id]/edit/page.tsx     # Form edit villa
 │   └── reservations/
-│       ├── page.tsx               # List reservasi
-│       └── new/page.tsx           # Form buat reservasi
+│       ├── page.tsx               # List reservasi dengan icon user
+│       ├── new/page.tsx           # Form buat reservasi
+│       └── [id]/edit/page.tsx     # Form edit reservasi
 │
 ├── components/
 │   ├── ui/                        # Komponen shadcn/ui
-│   ├── VillaForm.tsx              # Form komponen villa
-│   └── ReservationForm.tsx        # Form komponen reservasi
+│   └── ReservationForm.tsx        # Reusable form (Create & Edit)
 │
 └── lib/
-    ├── prisma.ts                  # Prisma client singleton
+    ├── prisma.ts                  # Prisma client singleton (v7 Adapter)
     └── validations.ts             # Zod schema validasi
 ```
 
@@ -97,11 +98,11 @@ src/
 
 | Layer | Lokasi | Tanggung Jawab |
 |---|---|---|
-| **Data Access** | `lib/prisma.ts` | Prisma client singleton |
-| **Business Logic** | `app/actions.ts` | Server Actions + validasi overlap tanggal |
-| **Schema Validasi** | `lib/validations.ts` | Zod schema (digunakan server & client) |
-| **UI Components** | `components/` | React components presentational |
-| **Routing & Pages** | `app/` | Next.js App Router pages |
+| **Data Access** | `lib/prisma.ts` | Prisma client + PG Adapter (v7 compatibility) |
+| **Business Logic** | `app/actions.ts` | Server Actions + logic overlap booking |
+| **Schema Validasi** | `lib/validations.ts` | Zod schema (cross-field validation) |
+| **UI Components** | `components/` | React components & shadcn primitives |
+| **Routing & Pages** | `app/` | Next.js App Router (RSC & Client Components) |
 
 ---
 
@@ -118,8 +119,10 @@ src/
 
 ## Fitur Utama
 
-- **CRUD Villa** — Tambah, lihat, edit, dan hapus data unit villa (Nama, Harga, Lokasi, Kapasitas)
-- **Sistem Reservasi** — Pilih villa dan rentang tanggal (Check-in & Check-out)
-- **Validasi Overlap** — Sistem otomatis menolak booking jika tanggal bersinggungan dengan reservasi yang sudah ada
-- **Server Actions** — Semua mutasi data menggunakan Next.js Server Actions
-- **Type Safety** — Validasi end-to-end menggunakan Zod dan TypeScript
+- **Dashboard Modern** — Statistik unit & reservasi serta tampilan Villa Unggulan.
+- **CRUD Villa Penuh** — Kelola data villa (Nama, Harga, Lokasi, Kapasitas) termasuk **Image URL support**.
+- **Sistem Reservasi & Edit** — Booking villa dengan sistem validasi tanggal yang cerdas.
+- **Validasi Overlap** — Pencegahan otomatis booking ganda/bertabrakan di villa yang sama.
+- **UI/UX Premium** — Menggunakan font **Outfit**, desain *glassmorphism* navbar, dan icon dari Lucide React.
+- **Server Actions & Zod** — Penanganan data yang aman dan ter-validasi di sisi server.
+- **Prisma v7 Support** — Implementasi terbaru menggunakan PostgreSQL adapter.
