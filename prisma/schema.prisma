@@ -14,6 +14,7 @@ model Villa {
   price       Decimal       @db.Decimal(10, 2)
   location    String
   capacity    Int
+  imageUrl    String?
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
   

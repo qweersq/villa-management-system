@@ -33,6 +33,7 @@ export default async function VillasPage() {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead className="w-24">Gambar</TableHead>
               <TableHead>Nama</TableHead>
               <TableHead>Lokasi</TableHead>
               <TableHead>Harga/Malam</TableHead>
@@ -43,13 +44,22 @@ export default async function VillasPage() {
           <TableBody>
             {villas.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={5} className="text-center h-24 text-muted-foreground">
+                <TableCell colSpan={6} className="text-center h-24 text-muted-foreground">
                   Belum ada data villa.
                 </TableCell>
               </TableRow>
             ) : (
               villas.map((villa) => (
                 <TableRow key={villa.id}>
+                  <TableCell>
+                    <div className="h-10 w-16 bg-slate-100 rounded overflow-hidden">
+                      <img 
+                        src={villa.imageUrl || "https://png.pngtree.com/png-vector/20240607/ourmid/pngtree-modern-luxury-villa-with-pool-and-palm-trees-clipart-png-image_12616616.png"} 
+                        alt={villa.name} 
+                        className="w-full h-full object-cover" 
+                      />
+                    </div>
+                  </TableCell>
                   <TableCell className="font-medium">{villa.name}</TableCell>
                   <TableCell>{villa.location}</TableCell>
                   <TableCell>Rp {Number(villa.price).toLocaleString('id-ID')}</TableCell>

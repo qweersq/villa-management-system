@@ -52,6 +52,11 @@ export default function NewVillaPage() {
               <Input id="location" name="location" required placeholder="Cth: Lembang, Bandung" />
             </div>
 
+            <div className="space-y-2">
+              <Label htmlFor="imageUrl">URL Gambar (Opsional)</Label>
+              <Input id="imageUrl" name="imageUrl" type="url" placeholder="https://contoh.com/gambar.jpg" />
+            </div>
+
             <Button type="submit" className="w-full mt-6">Simpan Data Villa</Button>
           </form>
         </CardContent>

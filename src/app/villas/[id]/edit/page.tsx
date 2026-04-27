@@ -63,6 +63,11 @@ export default async function EditVillaPage({ params }: { params: Promise<{ id: 
               <Input id="location" name="location" required defaultValue={villa.location} />
             </div>
 
+            <div className="space-y-2">
+              <Label htmlFor="imageUrl">URL Gambar (Opsional)</Label>
+              <Input id="imageUrl" name="imageUrl" type="url" placeholder="https://contoh.com/gambar.jpg" defaultValue={villa.imageUrl || ""} />
+            </div>
+
             <Button type="submit" className="w-full mt-6">Simpan Perubahan</Button>
           </form>
         </CardContent>
