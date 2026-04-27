@@ -28,15 +28,18 @@ cd balimo-test
 npm install
 ```
 
-### 3. Setup Environment Variables
+### 3. Setup Database & Environment Variables
 
-Buat file `.env` di root project:
-
-```env
-DATABASE_URL="postgresql://USER:PASSWORD@localhost:5432/villa_db"
+Buat database PostgreSQL baru bernama `balimo_villa`:
+```bash
+createdb balimo_villa
 ```
 
-Ganti `USER`, `PASSWORD`, dan nama database sesuai konfigurasi PostgreSQL lokal kamu.
+Lalu sesuaikan `.env` di root project:
+
+```env
+DATABASE_URL="postgresql://macpro@localhost:5432/balimo_villa?schema=public"
+```
 
 ### 4. Jalankan Migrasi Database Prisma
 

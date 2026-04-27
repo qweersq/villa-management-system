@@ -1,0 +1,37 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Villa {
+  id          String        @id @default(uuid())
+  name        String
+  description String?       @db.Text
+  price       Decimal       @db.Decimal(10, 2)
+  location    String
+  capacity    Int
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  
+  reservations Reservation[]
+}
+
+model Reservation {
+  id           String   @id @default(uuid())
+  villaId      String
+  customerName String
+  checkIn      DateTime @db.Date
+  checkOut     DateTime @db.Date
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  villa        Villa    @relation(fields: [villaId], references: [id], onDelete: Cascade)
+
+  // Memastikan check-in dan check-out terindeks untuk query overlap yang lebih cepat
+  @@index([checkIn, checkOut])
+  @@index([villaId])
+}
