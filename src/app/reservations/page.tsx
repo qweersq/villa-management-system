@@ -9,6 +9,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Link from "next/link";
+import { deleteReservation } from "@/app/actions";
+import { Edit, Trash } from "lucide-react";
 
 export default async function ReservationsPage() {
   const reservations = await prisma.reservation.findMany({
@@ -37,12 +39,13 @@ export default async function ReservationsPage() {
               <TableHead>Check-in</TableHead>
               <TableHead>Check-out</TableHead>
               <TableHead>Tanggal Booking</TableHead>
+              <TableHead className="text-right">Aksi</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {reservations.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={5} className="text-center h-24 text-muted-foreground">
+                <TableCell colSpan={6} className="text-center h-24 text-muted-foreground">
                   Belum ada data reservasi.
                 </TableCell>
               </TableRow>
@@ -54,6 +57,18 @@ export default async function ReservationsPage() {
                   <TableCell>{res.checkIn.toLocaleDateString('id-ID')}</TableCell>
                   <TableCell>{res.checkOut.toLocaleDateString('id-ID')}</TableCell>
                   <TableCell>{res.createdAt.toLocaleDateString('id-ID')}</TableCell>
+                  <TableCell className="text-right flex justify-end gap-2">
+                    <Link href={`/reservations/${res.id}/edit`} title="Edit Reservasi">
+                      <Button variant="outline" size="icon" className="h-8 w-8">
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                    </Link>
+                    <form action={deleteReservation.bind(null, res.id)}>
+                      <Button variant="destructive" size="icon" className="h-8 w-8" type="submit" title="Hapus Reservasi">
+                        <Trash className="h-4 w-4" />
+                      </Button>
+                    </form>
+                  </TableCell>
                 </TableRow>
               ))
             )}

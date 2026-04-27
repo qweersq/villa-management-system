@@ -67,3 +67,40 @@ export async function createReservation(formData: FormData) {
 
   return { success: true };
 }
+
+export async function updateReservation(id: string, formData: FormData) {
+  const parsed = ReservationSchema.safeParse(Object.fromEntries(formData.entries()));
+  if (!parsed.success) return { error: parsed.error.flatten() };
+
+  const { villaId, checkIn, checkOut, customerName } = parsed.data;
+
+  // Check Overlapping Dates, excluding the current reservation
+  const overlap = await prisma.reservation.findFirst({
+    where: {
+      villaId,
+      id: { not: id },
+      AND: [
+        { checkIn: { lt: checkOut } },
+        { checkOut: { gt: checkIn } }
+      ]
+    }
+  });
+
+  if (overlap) {
+    return { error: { fieldErrors: { checkIn: ["Tanggal ini sudah dibooking (overlapping)."] } } };
+  }
+
+  await prisma.reservation.update({
+    where: { id },
+    data: { villaId, checkIn, checkOut, customerName }
+  });
+
+  revalidatePath("/reservations");
+
+  return { success: true };
+}
+
+export async function deleteReservation(id: string) {
+  await prisma.reservation.delete({ where: { id } });
+  revalidatePath("/reservations");
+}
