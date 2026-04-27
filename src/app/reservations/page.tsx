@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 import { deleteReservation } from "@/app/actions";
-import { Edit, Trash } from "lucide-react";
+import { Edit, Trash, User } from "lucide-react";
 
 export default async function ReservationsPage() {
   const reservations = await prisma.reservation.findMany({
@@ -52,7 +52,14 @@ export default async function ReservationsPage() {
             ) : (
               reservations.map((res) => (
                 <TableRow key={res.id}>
-                  <TableCell className="font-medium">{res.customerName}</TableCell>
+                  <TableCell className="font-medium">
+                    <div className="flex items-center gap-3">
+                      <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                        <User className="h-4 w-4" />
+                      </div>
+                      {res.customerName}
+                    </div>
+                  </TableCell>
                   <TableCell>{res.villa.name}</TableCell>
                   <TableCell>{res.checkIn.toLocaleDateString('id-ID')}</TableCell>
                   <TableCell>{res.checkOut.toLocaleDateString('id-ID')}</TableCell>
